@@ -27,9 +27,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .loss_mitigation import photon_recycling
-from .error_mitigation import ErrorMitigation
-from .compilation_averaging import CompilationAveraging
-from .compilation_preselection import CompilationPreselection
-from .detector_balancing import DetectorBalancing
-from .photon_error_mitigation import PhotonErrorMitigation
+from abstract_error_mitigation_technique import ACompilationMitigation
+
+
+class CompilationAveraging(ACompilationMitigation):
+    """
+    Circuit Compilation Averaging
+
+    Compile the QPU repeatedly and average output statistics. Exclude
+    results based off desired criteria.
+
+    :param reps: Number of extra circuits to compute the average
+        output statistics over.
+    :param tol: TVD tolerance. Over repetitions, a result, H is
+        rejected if TVD(H, H_avg) > μ_TVD + tol * σ_TVD where μ_TVD,
+        σ_TVD is the mean & standard dev. of the TVD taken with the
+        averaged statistic, H.
+    :param leaky_tol: Results with counts detected outside modes of
+        input circuit above this threshold are removed.
+    """
+    def __init__(self, reps: int, tol: float = None, leaky_tol: float = None):
+        self.reps = reps
+        self.tol = tol
+        self.leaky_tol = leaky_tol
+

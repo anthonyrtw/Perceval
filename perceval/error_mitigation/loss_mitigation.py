@@ -31,7 +31,7 @@ from math import comb
 from scipy.optimize import curve_fit
 from perceval.utils import BSCount, BSDistribution, BasicState
 from perceval.utils.logging import get_logger, channel
-from ._loss_mitigation_utils import _gen_lossy_dists, _get_avg_exp_from_uni_dist, _generate_one_photon_per_mode_mapping
+from .utils._loss_mitigation_utils import _gen_lossy_dists, _get_avg_exp_from_uni_dist, _generate_one_photon_per_mode_mapping
 
 
 def _validate_noisy_input(noisy_input: BSCount | BSDistribution, ideal_photon_count: int):

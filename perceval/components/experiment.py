@@ -47,7 +47,7 @@ from .linear_circuit import Circuit, ACircuit
 from .non_unitary_components import TD
 from .port import Herald, PortLocation, APort, get_basic_state_from_ports
 from .unitary_components import Barrier, PERM, Unitary, PS
-
+from ..error_mitigation.error_mitigation import ErrorMitigation
 
 @dataclass
 class _PhaseNoise:
@@ -76,7 +76,13 @@ class Experiment:
 
     _no_copiable_attributes = { '_circuit_changed_observers', '_noise_changed_observers', '_input_changed_observers' }
 
-    def __init__(self, m_circuit: int | ACircuit = None, noise: NoiseModel = None, name: str = "Experiment"):
+    def __init__(
+        self,
+        m_circuit: int | ACircuit = None,
+        noise: NoiseModel = None,
+        error_mitigation: ErrorMitigation = None,
+        name: str = "Experiment"
+    ):
         self._input_state = None
         self.name: str = name
 
@@ -87,6 +93,7 @@ class Experiment:
         self._input_changed_observers: list[Callable[[], None]] = []
 
         self.noise: NoiseModel | None = noise
+        self.error_mitigation: ErrorMitigation | None = error_mitigation
 
         self._reset_circuit()
         self._init_circuit(m_circuit)
@@ -194,6 +201,17 @@ class Experiment:
                     observer_fn()
         else:
             raise TypeError("noise type has to be 'NoiseModel'")
+
+    @property
+    def error_mitigation(self):
+        return self._error_mitigation
+
+    @error_mitigation.setter
+    def error_mitigation(self, em: ErrorMitigation | None):
+        if em is None or isinstance(em, ErrorMitigation):
+            self._error_mitigation = em
+        else:
+            raise TypeError("Error-mitigation must be of type `ErrorMitigation`.")
 
     @property
     def post_select_fn(self):

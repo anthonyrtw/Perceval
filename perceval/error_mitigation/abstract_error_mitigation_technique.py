@@ -27,9 +27,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .loss_mitigation import photon_recycling
-from .error_mitigation import ErrorMitigation
-from .compilation_averaging import CompilationAveraging
-from .compilation_preselection import CompilationPreselection
-from .detector_balancing import DetectorBalancing
-from .photon_error_mitigation import PhotonErrorMitigation
+from abc import ABC
+
+
+class AErrorMitigationTechnique(ABC):
+    """
+    Abstract Error Mitigation Technique
+    """
+    ...
+
+
+
+class ACompilationMitigation(AErrorMitigationTechnique, ABC):
+    """
+    Abstract Compilation Error Mitigation
+    """
+    ...
+

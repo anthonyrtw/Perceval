@@ -27,9 +27,40 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .loss_mitigation import photon_recycling
-from .error_mitigation import ErrorMitigation
-from .compilation_averaging import CompilationAveraging
-from .compilation_preselection import CompilationPreselection
-from .detector_balancing import DetectorBalancing
-from .photon_error_mitigation import PhotonErrorMitigation
+from typing import Sequence
+
+from .abstract_error_mitigation_technique import ACompilationMitigation
+from ..utils import BasicState
+
+
+class CompilationPreselection(ACompilationMitigation):
+    """
+    Circuit Compilation Pre-selection
+
+    Pre-compiles a circuit a number of times & accept unitaries based on
+    their accuracy in single-photon experiments.
+
+    :param n_samples: Number of samples to obtain in each pre-selection
+        experiment.
+    :param n_trials: Number of compilations to test.
+    :param max_accept: Max. number of compilations to accept. Number of
+        compilations is fixed for `train=False`.
+    :param train: Take a weighted average of the results at run-time.
+        Weights calculated from single-photon results via training
+        at pre-selection phase.
+    :param subspace: a target list of BasicState to compute the TVD for
+        preselection
+    """
+    def __init__(
+        self,
+        n_samples: int,
+        n_trials: int,
+        max_accept: int,
+        train: bool,
+        subspace: Sequence[BasicState]
+    ):
+        self.nsamples = n_samples
+        self.ntrials = n_trials
+        self.max_accept = max_accept
+        self.train = train
+        self.subspace = tuple(subspace)

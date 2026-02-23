@@ -37,6 +37,7 @@ from perceval.components.detector import DetectionType
 from perceval.components.experiment import Experiment
 from perceval.components.linear_circuit import Circuit, ACircuit
 from perceval.components.port import PortLocation, APort
+from perceval.error_mitigation import ErrorMitigation
 
 
 class ProcessorType(Enum):
@@ -138,6 +139,14 @@ class AProcessor(ABC):
     @noise.setter
     def noise(self, nm: NoiseModel):
         self.experiment.noise = nm
+
+    @property
+    def error_mitigation(self):
+        return self.experiment.error_mitigation
+
+    @error_mitigation.setter
+    def error_mitigation(self, em: ErrorMitigation):
+        self.experiment.error_mitigation = em
 
     @property
     @abstractmethod

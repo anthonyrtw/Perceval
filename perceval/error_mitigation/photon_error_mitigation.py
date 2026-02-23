@@ -27,9 +27,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .loss_mitigation import photon_recycling
-from .error_mitigation import ErrorMitigation
-from .compilation_averaging import CompilationAveraging
-from .compilation_preselection import CompilationPreselection
-from .detector_balancing import DetectorBalancing
-from .photon_error_mitigation import PhotonErrorMitigation
+
+class PhotonErrorMitigation:
+    """
+    Partial Distinguishability and g(2) Mitigation
+
+    Uses partition mitigation framework to prepare extra sub-input
+    states and postprocess accordingly.
+
+    :param order: Partition mitigation order. If a `list`, the specified
+        distinguishability orders are corrected. If an `int`, every
+        correction <= order is applied. If `-1`, all `n` orders for
+        `n` photons are corrected.
+
+    """
+    def __init__(self, order: int):
+        self.order = order

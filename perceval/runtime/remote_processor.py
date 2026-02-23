@@ -39,6 +39,7 @@ from .remote_config import RemoteConfig
 from .payload_generator import PayloadGenerator
 from .abstract_processor import AProcessor, ProcessorType
 from .processor import Processor
+from ..error_mitigation.error_mitigation import ErrorMitigation
 
 PERFS_KEY = "perfs"
 TRANSMITTANCE_KEY = "Transmittance (%)"
@@ -74,7 +75,8 @@ class RemoteProcessor(AProcessor):
                  proxies: dict[str,str] = None,
                  rpc_handler: RPCHandler = None,
                  m: int = None,
-                 noise: NoiseModel = None):
+                 noise: NoiseModel = None,
+                 error_mitigation: ErrorMitigation = None):
         """
         :param name: Platform name
         :param token: Token value to authenticate the user
@@ -87,7 +89,7 @@ class RemoteProcessor(AProcessor):
         :param noise: a NoiseModel containing noise parameters (defaults to no noise)
                       simulated noise is ignored when working on a physical Quantum Processing Unit
         """
-        super().__init__(Experiment(m, noise=noise, name=name))
+        super().__init__(Experiment(m, noise=noise, error_mitigation=error_mitigation, name=name))
         if rpc_handler is not None:  # When a rpc_handler object is passed, name, token and url are expected to be None
             self._rpc_handler = rpc_handler
             self.name = rpc_handler.name  # Here, we are mixing the experiment name and the Processor name
