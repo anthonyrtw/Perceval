@@ -28,7 +28,7 @@
 # SOFTWARE.
 import copy
 
-from .error_mitigation_technique import ChipEMTechnique
+from .abstract_technique import ChipEMTechnique
 from .utils._distributions import sum_distributions
 from .utils._error_mitigation_utils import batch_list
 from ...utils.dist_metrics import tvd_dist
